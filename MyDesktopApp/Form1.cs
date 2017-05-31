@@ -1,4 +1,4 @@
-﻿using Interop.RidoCRC;
+﻿using RidoCRC;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
