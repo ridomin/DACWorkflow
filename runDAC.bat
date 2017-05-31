@@ -1,0 +1,2 @@
+DesktopAppConverter.exe -Installer .\MyDesktopApp.Setup\Debug\MyDesktopApp.Setup.msi -Destinatio
+n .\DacAppx -InstallerArguments "/q" -PackageNAme "MyDesktopApp" -Publisher "CN=rido" -Version "1.0.0.0"
