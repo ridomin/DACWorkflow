@@ -29,28 +29,49 @@ namespace MyDesktopApp
         {
             if (textBox1.Text.Length > 3)
             {
-                cBinaryFileStream file = new cBinaryFileStream();
-                file.File = textBox1.Text;
-                cCRC32 crc = new cCRC32();
-                var res = crc.GetFileCrc32(file);
-                label1.Text = res.ToString();
+                label1.Text = CalculateCRCWithCOM(textBox1.Text).ToString();
 
-                DamienG.Security.Cryptography.Crc32 crc32 = new DamienG.Security.Cryptography.Crc32();
-                var f = File.OpenRead(textBox1.Text);
-                var res2 = crc32.ComputeHash(f);
-                label1.Text += " " + GetBigEndianUInt32(res2);
+                label2.Text = CalculateCRCWithDotNet(textBox1.Text).ToString();
             }
         }
 
-        protected static UInt32 GetBigEndianUInt32(byte[] bytes)
+        private uint CalculateCRCWithDotNet(string fileName)
         {
-            if (bytes.Length != 4)
-                throw new ArgumentOutOfRangeException("bytes", "Must be 4 bytes in length");
+            uint res = 0;
+            try
+            {
+                DamienG.Security.Cryptography.Crc32 crc32 = new DamienG.Security.Cryptography.Crc32();
+                var f = File.OpenRead(fileName);
+                var res2 = crc32.ComputeHash(f);
 
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(res2);
+
+                res = BitConverter.ToUInt32(res2, 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return res;
+        }
+
+        private Int32 CalculateCRCWithCOM(string fileName)
+        {
+            int res = 0;
+            try
+            {
+                cBinaryFileStream file = new cBinaryFileStream();
+                file.File = fileName;
+                cCRC32 crc = new cCRC32();
+                res =  crc.GetFileCrc32(file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return res;
             
-            return BitConverter.ToUInt32(bytes, 0);
         }
     }
 }
