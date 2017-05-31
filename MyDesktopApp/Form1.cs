@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interop.RidoCRC;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,9 +29,9 @@ namespace MyDesktopApp
         {
             if (textBox1.Text.Length > 3)
             {
-                RidoCRC.cBinaryFileStream file = new RidoCRC.cBinaryFileStream();
+                cBinaryFileStream file = new cBinaryFileStream();
                 file.File = textBox1.Text;
-                RidoCRC.cCRC32 crc = new RidoCRC.cCRC32();
+                cCRC32 crc = new cCRC32();
                 var res = crc.GetFileCrc32(file);
                 label1.Text = res.ToString();
 
